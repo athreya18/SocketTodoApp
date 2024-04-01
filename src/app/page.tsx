@@ -49,7 +49,7 @@ export default function Home() {
 
   const fetchTask = async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/api/todos/');
+      const response=await axios.get('https://final-api-todos.onrender.com/api/todos/');
       console.log({response})
       allTask(response.data)
 
@@ -60,7 +60,8 @@ export default function Home() {
 
   useEffect(()=>{
       fetchTask();
-  });
+      //eslint-disable-next-line
+  },[]);
   
   return (
     <>
