@@ -37,11 +37,7 @@ export const useTaskList = create(
               description: description,
               showEdit: showEdit,
               status:"todo"
-<<<<<<< HEAD
-            } as TaskList,   
-=======
             } as TaskList,
->>>>>>> d3c462542e56ac9d297efd0be6af0d9d27531bc9
           ],
         }));
       },
