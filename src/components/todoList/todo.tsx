@@ -81,11 +81,6 @@ const Todos = (props: any) => {
             }
             setIsCheckboxChecked(false);
             closeSheet();
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> d3c462542e56ac9d297efd0be6af0d9d27531bc9
         } catch (error) {
             console.error('Error updating task:', error);
         }
@@ -124,7 +119,7 @@ const Todos = (props: any) => {
                 console.error('Failed to delete all tasks');
             }
         } catch (error) {
-            console.error('Error deleting all tasks:', error);
+            // console.error('Error deleting all tasks:', error);
         }
     };
 
@@ -146,7 +141,6 @@ const Todos = (props: any) => {
                     <div className="flex flex-col items-center justify-center ">
                         <Image src={newtask} alt="" onClick={openSheet} width={182} height={10} className="ml-48 self-start flex flew-row hover:bg-rgba-121-136-164-1 " ></Image>
                         {createdTasks.length !== 0 && createdTasks.map((task: TaskList, index: number) => {
-                            console.log({ task })
                             return (
 
                                 (task.status === "todo") ?
@@ -165,7 +159,7 @@ const Todos = (props: any) => {
                                                             <DialogHeader>
                                                                 <DialogTitle>Edit profile</DialogTitle>
                                                                 <DialogDescription>
-                                                                    Make changes to your profile here. Click save when you're done.
+                                                                    Make changes to your profile here. Click save when you are done.
                                                                 </DialogDescription>
                                                             </DialogHeader>
                                                             <div className="grid gap-4 py-4">
