@@ -2,19 +2,11 @@ import create from 'zustand';
 import { persist,createJSONStorage } from 'zustand/middleware';
 
 type TaskList = {
-<<<<<<< HEAD
   id:string;
   title: string;
   description: string;
   showEdit: boolean;
   status: string;
-=======
-    id:string;
-    title: string;
-    description: string;
-    showEdit: boolean;
-    status: string;
->>>>>>> d3c462542e56ac9d297efd0be6af0d9d27531bc9
 };
 
 export const useTaskList = create(
