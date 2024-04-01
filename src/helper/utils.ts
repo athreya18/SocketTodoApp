@@ -1,9 +1,8 @@
 import axios from "axios";
 
 export const createNewTask = async (title: string, desc: string) => {
-    console.log("1111111111111")
     try {
-      const resp = await axios.post('http://localhost:3001/api/todos', { title:title, description: desc, status: "todo" });
+      const resp = await axios.post('https://final-api-todos.onrender.com/api/todos', { title:title, description: desc, status: "todo" });
       return resp;
 
     } catch (error) {
