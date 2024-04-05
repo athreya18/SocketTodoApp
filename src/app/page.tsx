@@ -21,7 +21,7 @@ export default function Home() {
   const [tasks, setTasks] = useState<Array<{ title: string, desc: string }>>([]);
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string >("");
-
+  
   const openSheet = () => {
     setIsSheetOpen(true);
   };
@@ -35,8 +35,10 @@ export default function Home() {
 
   const onSave = async () => {
     const resp:any = await createNewTask(title, desc);
-      updateTask(resp.data.id, resp.data.title, resp.data.description, false, resp.data.status)
-      if(resp && resp.data) {
+    const { data = {} } = resp;
+    updateTask(data.id, data.title, data.description, false, data.status)
+    if(resp && resp.data)
+    {
         createTask();
         closeSheet();
     }
@@ -49,7 +51,7 @@ export default function Home() {
 
   const fetchTask = async()=>{
     try{
-      const response=await axios.get('https://final-api-todos.onrender.com/api/todos/');
+      const response=await axios.get('http://localhost:3001/api/todos/');
       console.log({response})
       allTask(response.data)
 

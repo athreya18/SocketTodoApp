@@ -38,7 +38,8 @@ const Todos = (props: any) => {
     const [completedTasks, setCompletedTasks] = useState<TaskList[]>([]);
     const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
 
-    const baseUrl = "https://final-api-todos.onrender.com"
+    const baseUrl = "http://final-api-todos.onrender.com"
+
     const openSheet = () => {
         setIsSheetOpen(true);
         setIsCheckboxChecked(false);
@@ -60,7 +61,7 @@ const Todos = (props: any) => {
     const update = async (id: number, selectedTitle = "", selectedDes = "") => {
         console.log({ id })
         try {
-            const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
+            const resp = await axios.put(`http://localhost:3001/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
             // updateTask(title, desc);
             if (resp) {
                 const finalRes = createdTasks.map((res: TaskList) => {
@@ -88,9 +89,9 @@ const Todos = (props: any) => {
     };
     const createTask = async () => {
         try {
-            const resp: any = await createNewTask(title, desc);
-            console.log({ resp })
-            updateTask(resp.data.id, resp.data.title, resp.data.description, false)
+            const resp= await createNewTask(title, desc);
+            const {data = {}}: any = resp
+            updateTask(data.id, data.title, data.description, false)
             setTitle('');
             setDesc('');
             closeSheet();
@@ -101,7 +102,7 @@ const Todos = (props: any) => {
     };
     const deleteTaskHandler = async (id: number) => {
         try {
-            const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
+            const resp = await axios.delete(`http://localhost:3001/api/todos/${id}`);
             deleteTask(id)
             
         } catch (error) {
@@ -112,7 +113,7 @@ const Todos = (props: any) => {
 
     const deleteCompletedtasks = async () => {
         try {
-            const resp = await axios.delete(baseUrl + '/api/todos');
+            const resp = await axios.delete('http://localhost:3001/api/todos/');
             if (resp.status === 200) {
                 allTask(resp.data)
                 setShowCompletedTasks(false);
@@ -141,7 +142,7 @@ const Todos = (props: any) => {
                     <p className='ml-20 text-gray-500 flex flex-row justify-center items-center font-[Urbanist]'>{`You have ${createdTasks.length} task${createdTasks.length !== 1 ? 's' : ''} to do`}</p>
                     <div className="flex flex-col items-center justify-center ">
                         <Image src={newtask} alt="" onClick={openSheet} width={182} height={10} className="ml-48 self-start flex flew-row hover:bg-rgba-121-136-164-1 " ></Image>
-                        {createdTasks.length !== 0 && createdTasks.map((task: TaskList, index: number) => {
+                        {Array.isArray(createdTasks) && createdTasks.length !== 0 && createdTasks?.map((task: TaskList, index: number) => {
                             return (
 
                                 (task.status === "todo") ?
@@ -229,7 +230,7 @@ const Todos = (props: any) => {
 
             {/* COMPLETED TASKS */}
                     
-                    {createdTasks.some((task: any) => task?.status === "completed") && (
+                    {Array.isArray(createdTasks) && createdTasks.some((task: any) => task?.status === "completed") && (
                         <div>
                             <h3 className='mt-12 ml-48 flex flex-row justify-start items-start font-bold font-[Urbanist]'>Completed Tasks</h3>
                             <div className='flex flex-row justify-end align-end mr-40'>
@@ -238,7 +239,7 @@ const Todos = (props: any) => {
                             </div>
                         </div>)}
                     <div className="flex flex-col items-center justify-center">
-                        {createdTasks.map((task: TaskList, index: number) => {
+                        {Array.isArray(createdTasks) && createdTasks.map((task: TaskList, index: number) => {
                             if (task.status === "completed") {
                                 console.log("123456789")
                                 return (

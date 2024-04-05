@@ -19,7 +19,7 @@ export const useTaskList = create(
             createdTasks: data
         }))
       },
-      updateTask: (id: string, title: string, description: string, showEdit: boolean, status: string) => {
+      updateTask: (id: string, title: string, description: string, showEdit: boolean, status: string):any => {
         set((state: any) => ({
           createdTasks: [
             ...state.createdTasks,
