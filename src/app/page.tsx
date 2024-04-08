@@ -11,7 +11,7 @@ import john from "../components/images/john.svg";
 import list from "../components/images/list.svg";
 import ss from "../components/images/ss.svg";
 import axios from 'axios';
-import { createNewTask } from "@/helper/utils";
+import { baseUrl, createNewTask } from "@/helper/utils";
 
 export default function Home() {
         
@@ -51,10 +51,9 @@ export default function Home() {
 
   const fetchTask = async()=>{
     try{
-      const response=await axios.get('http://localhost:3001/api/todos/');
+      const response=await axios.get(baseUrl + '/api/todos/');
       console.log({response})
       allTask(response.data)
-
     }catch(error){
       console.error('Error fetching tasks',error)
     }

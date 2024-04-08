@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import trash from "../images/trash.svg";
 import deleteall from "../images/deleteall.svg"
 import axios from 'axios';
-import { createNewTask } from '@/helper/utils';
+import { baseUrl, createNewTask } from '@/helper/utils';
 
 type TaskList = {
     id: number;
@@ -38,8 +38,6 @@ const Todos = (props: any) => {
     const [completedTasks, setCompletedTasks] = useState<TaskList[]>([]);
     const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
 
-    const baseUrl = "http://final-api-todos.onrender.com"
-
     const openSheet = () => {
         setIsSheetOpen(true);
         setIsCheckboxChecked(false);
@@ -61,7 +59,7 @@ const Todos = (props: any) => {
     const update = async (id: number, selectedTitle = "", selectedDes = "") => {
         console.log({ id })
         try {
-            const resp = await axios.put(`http://localhost:3001/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
+            const resp = await axios.put(baseUrl +'/api/todos/${id}', { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
             // updateTask(title, desc);
             if (resp) {
                 const finalRes = createdTasks.map((res: TaskList) => {
@@ -102,7 +100,7 @@ const Todos = (props: any) => {
     };
     const deleteTaskHandler = async (id: number) => {
         try {
-            const resp = await axios.delete(`http://localhost:3001/api/todos/${id}`);
+            const resp = await axios.delete( baseUrl + '/api/todos/${id}');
             deleteTask(id)
             
         } catch (error) {
@@ -113,7 +111,7 @@ const Todos = (props: any) => {
 
     const deleteCompletedtasks = async () => {
         try {
-            const resp = await axios.delete('http://localhost:3001/api/todos/');
+            const resp = await axios.delete(baseUrl + '/api/todos/');
             if (resp.status === 200) {
                 allTask(resp.data)
                 setShowCompletedTasks(false);
