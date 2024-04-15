@@ -180,7 +180,7 @@ const Todos = (props: any) => {
                 setShowCompletedTasks(false);
                 allTask(resp.data)
                 socket.on('tasksDeleted',()=>{
-                    console.log('Completed tasks deleted successfully');
+                    
                 });
             } else 
             {
