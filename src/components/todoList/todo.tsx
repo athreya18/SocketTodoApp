@@ -16,8 +16,6 @@ import trash from "../images/trash.svg";
 import deleteall from "../images/deleteall.svg"
 import axios from 'axios';
 import { baseUrl, createNewTask } from '@/helper/utils';
-import { io } from 'socket.io-client';
-import { socket } from '@/helper/socket';
 
 type TaskList = {
     id: number;
@@ -39,66 +37,13 @@ const Todos = (props: any) => {
     const [hoveredTaskIndex, setHoveredTaskIndex] = useState<number | null>(null);
     const [completedTasks, setCompletedTasks] = useState<TaskList[]>([]);
     const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
-    const [isConnected, setIsConnected] = useState(false);
-    const [transport, setTransport] = useState("N/A");
-    
-    // useEffect(()=>{
-    //     const socket=io();
-    //     socket.on('newTodo', (newTodo: TaskList) => {
-    //         updateTask(newTodo.id, newTodo.title, newTodo.description, newTodo.showEdit, newTodo.status);
-    //     });
-    //     setSocket(socket);
-    //     return () => {
-    //         socket.disconnect();
-    //     };
-    // },[])
-
-    useEffect(() => {
-
-        console.log({s: socket.connected})
-        if (socket.connected) {
-          onConnect();
-        }
-    
-        function onConnect() {
-          setIsConnected(true);
-          setTransport(socket.io.engine.transport.name);
-    
-          socket.io.engine.on("upgrade", (transport: any) => {
-            setTransport(transport.name);
-          });
-        }
-    
-        socket.on('message', (message) => {
-            // setReceivedMessage(message);
-
-            console.log({message})
-            
-            updateTask(message.id, message.title, message.description, false, message.status)
-                
-
-          });
-      
-        function onDisconnect() {
-          setIsConnected(false);
-          setTransport("N/A");
-        }
-    
-        socket.on("connect", onConnect);
-        socket.on("disconnect", onDisconnect);
-    
-        return () => {
-          socket.off("connect", onConnect);
-          socket.off("disconnect", onDisconnect);
-        };
-      }, []);
 
     const openSheet = () => {
         setIsSheetOpen(true);
         setIsCheckboxChecked(false);
         createNewTask(title, desc);
     };
- 
+
     const closeSheet = () => {
         setIsSheetOpen(false);
         setSelectedTaskIndex(0);
@@ -112,6 +57,7 @@ const Todos = (props: any) => {
     };
 
     const update = async (id: number, selectedTitle = "", selectedDes = "") => {
+        console.log({ id })
         try {
             const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
             // updateTask(title, desc);
@@ -135,15 +81,10 @@ const Todos = (props: any) => {
             }
             setIsCheckboxChecked(false);
             closeSheet();
-
-            socket.on('taskUpdated', (updatedTask) => {
-                updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
-            });
         } catch (error) {
             console.error('Error updating task:', error);
         }
     };
-
     const createTask = async () => {
         try {
             const resp= await createNewTask(title, desc);
@@ -157,16 +98,11 @@ const Todos = (props: any) => {
             console.error('Error creating task:', error);
         }
     };
-    
     const deleteTaskHandler = async (id: number) => {
         try {
             const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
             deleteTask(id)
-            socket.on('taskDeleted', (deletedTaskId) => {
-                // Filter out the deleted task from the client-side state
-                deleteTask(deletedTaskId)
-            });
-
+            
         } catch (error) {
             console.error('Error deleting task:', error);
         }
@@ -177,19 +113,16 @@ const Todos = (props: any) => {
         try {
             const resp = await axios.delete(`${baseUrl}/api/todos/`);
             if (resp.status === 200) {
-                setShowCompletedTasks(false);
                 allTask(resp.data)
-                socket.on('tasksDeleted',()=>{
-                    console.log('Completed tasks deleted successfully');
-                });
-            } else 
-            {
+                setShowCompletedTasks(false);
+            } else {
                 console.error('Failed to delete all tasks');
             }
         } catch (error) {
             // console.error('Error deleting all tasks:', error);
         }
     };
+
     const editTasks = (index: number) => {
         setSelectedTaskIndex(index);
         setDesc(createdTasks[index].description);
@@ -209,6 +142,7 @@ const Todos = (props: any) => {
                         <Image src={newtask} alt="" onClick={openSheet} width={182} height={10} className="ml-48 self-start flex flew-row hover:bg-rgba-121-136-164-1 " ></Image>
                         {Array.isArray(createdTasks) && createdTasks.length !== 0 && createdTasks?.map((task: TaskList, index: number) => {
                             return (
+
                                 (task.status === "todo") ?
                                     <>
                                         {/* {task.status === "todo" ? <p>todo</p> : <p>completed</p>} */}
@@ -291,7 +225,9 @@ const Todos = (props: any) => {
                         }
                         )}
                     </div>
+
             {/* COMPLETED TASKS */}
+                    
                     {Array.isArray(createdTasks) && createdTasks.some((task: any) => task?.status === "completed") && (
                         <div>
                             <h3 className='mt-12 ml-48 flex flex-row justify-start items-start font-bold font-[Urbanist]'>Completed Tasks</h3>
