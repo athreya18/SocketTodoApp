@@ -42,17 +42,6 @@ const Todos = (props: any) => {
     const [isConnected, setIsConnected] = useState(false);
     const [transport, setTransport] = useState("N/A");
 
-    // useEffect(()=>{
-    //     const socket=io();
-    //     socket.on('newTodo', (newTodo: TaskList) => {
-    //         updateTask(newTodo.id, newTodo.title, newTodo.description, newTodo.showEdit, newTodo.status);
-    //     });
-    //     setSocket(socket);
-    //     return () => {
-    //         socket.disconnect();
-    //     };
-    // },[])
-
     useEffect(() => {
 
         console.log({ s: socket.connected })
@@ -75,20 +64,34 @@ const Todos = (props: any) => {
             console.log({ message })
 
             updateTask(message.id, message.title, message.description, false, message.status)
+        });
 
+        socket.on('taskDeleted', (deletedTaskId) => {
+            deleteTask(deletedTaskId);
+        });
 
+        socket.on('tasksDeleted',()=>{
+            console.log('Completed tasks deleted successfully');
+            console.log('22222')
+            deleteCompletedtasks();
+        });
+
+        socket.on('taskUpdated', (updatedTask) => {  
+            updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
         });
 
         function onDisconnect() {
             setIsConnected(false);
             setTransport("N/A");
         }
-
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
 
         return () => {
             socket.off("connect", onConnect);
+            socket.off('taskDeleted');
+            socket.off('taskUpdated');
+            socket.off('tasksDeleted');
             socket.off("disconnect", onDisconnect);
         };
     }, []);
@@ -140,6 +143,7 @@ const Todos = (props: any) => {
             socket.on('taskUpdated', (updatedTask) => {
                 updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
             });
+            
         } catch (error) {
             console.error('Error updating task:', error);
         }
@@ -161,6 +165,7 @@ const Todos = (props: any) => {
 
     const deleteTaskHandler = async (id: number) => {
         try {
+            console.log('11111')
             const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
             deleteTask(id)
             socket.on('taskDeleted', (deletedTaskId) => {

@@ -19,29 +19,20 @@ export const useTaskList = create(
             createdTasks: data
         }))
       },
-      updateTask: (id: string, title: string, description: string, showEdit: boolean, status: string): any => {
-        set((state: any) => {
-          // Check if the task with the provided ID already exists
-          const taskExists = state.createdTasks.some((task: TaskList) => task.id === id);
-          
-          if (taskExists) {
-            return state;
-          }
-          
-          return {
-            createdTasks: [
-              ...state.createdTasks,
-              {
-                id: id,
-                title: title,
-                description: description,
-                showEdit: showEdit,
-                status: status
-              } as TaskList,
-            ],
-          };
-        });
-      },
+      updateTask: (id:string, title:string, description:string, showEdit:boolean, status:string) => {
+        set((state:any) => ({
+            createdTasks: state.createdTasks.map((task:any) =>
+                task.id === id
+                    ? {
+                          ...task,
+                          title,
+                          description,
+                          showEdit,
+                          status,
+                      }
+                    : task
+            ),
+        }))},
 
       editTodoTasks: (id: string, title: string, description: string, showEdit: boolean,status:string) => {
         set((state: any) => ({
