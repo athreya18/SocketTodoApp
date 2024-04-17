@@ -1,6 +1,6 @@
 import axios from "axios";
 import { socket } from "./socket";
-export const baseUrl = "https://sockettodoapp.netlify.app"
+export const baseUrl = "https://socketapi-2.onrender.com"
 
 // export const baseUrl = "https://final-api-todos.onrender.com"
 
