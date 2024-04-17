@@ -113,7 +113,19 @@ const Todos = (props: any) => {
 
     const update = async (id: number, selectedTitle = "", selectedDes = "") => {
         try {
+<<<<<<< HEAD
             const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
+=======
+<<<<<<< HEAD
+            const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
+=======
+<<<<<<< HEAD
+            const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
+=======
+            const resp = await axios.put(baseUrl +'/api/todos/${id}', { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
             // updateTask(title, desc);
             if (resp) {
                 const finalRes = createdTasks.map((res: TaskList) => {
@@ -160,9 +172,31 @@ const Todos = (props: any) => {
     
     const deleteTaskHandler = async (id: number) => {
         try {
+<<<<<<< HEAD
             const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
             deleteTask(id)
             socket.on('taskDeleted', (deletedTaskId) => {
+=======
+<<<<<<< HEAD
+            const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
+            deleteTask(id)
+            socket.on('taskDeleted', (deletedTaskId) => {
+=======
+<<<<<<< HEAD
+            const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
+            deleteTask(id)
+            socket.on('taskDeleted', (deletedTaskId) => {
+=======
+            const resp = await axios.delete( baseUrl + '/api/todos/${id}');
+            deleteTask(id)
+<<<<<<< HEAD
+            socket.on('taskDeleted', (deletedTaskId:any) => {
+=======
+            socket.on('taskDeleted', (deletedTaskId) => {
+>>>>>>> 70243a5 (New Commit)
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
                 // Filter out the deleted task from the client-side state
                 deleteTask(deletedTaskId)
             });
@@ -175,12 +209,40 @@ const Todos = (props: any) => {
 
     const deleteCompletedtasks = async () => {
         try {
+<<<<<<< HEAD
             const resp = await axios.delete(`${baseUrl}/api/todos/`);
+=======
+<<<<<<< HEAD
+            const resp = await axios.delete(`${baseUrl}/api/todos/`);
+=======
+<<<<<<< HEAD
+            const resp = await axios.delete(`${baseUrl}/api/todos/`);
+=======
+            const resp = await axios.delete(baseUrl + '/api/todos/');
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
             if (resp.status === 200) {
                 setShowCompletedTasks(false);
                 allTask(resp.data)
                 socket.on('tasksDeleted',()=>{
+<<<<<<< HEAD
                     
+=======
+<<<<<<< HEAD
+                    
+=======
+<<<<<<< HEAD
+                    
+=======
+<<<<<<< HEAD
+                    
+=======
+                    console.log('Completed tasks deleted successfully');
+>>>>>>> 70243a5 (New Commit)
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
                 });
             } else 
             {

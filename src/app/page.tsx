@@ -13,8 +13,24 @@ import ss from "../components/images/ss.svg";
 import axios from 'axios';
 import { baseUrl, createNewTask } from "@/helper/utils";
 
+<<<<<<< HEAD
 export default function Home() {
         
+=======
+<<<<<<< HEAD
+export default function Home() {
+        
+=======
+<<<<<<< HEAD
+export default function Home() {
+        
+=======
+
+export default function Home() {
+  
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
   const { updateTask, createdTasks, allTask}: any = useTaskList();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<number>(0);
@@ -22,36 +38,109 @@ export default function Home() {
   const [title, setTitle] = useState<string>("");
   const [desc, setDesc] = useState<string >("");
   
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
   const openSheet = () => {
     setIsSheetOpen(true);
   };
 
   const closeSheet = () => {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+  const openSheet =() => {
+    setIsSheetOpen(true);
+  };
+  
+  const closeSheet=() => {
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
     setIsSheetOpen(false);
     setSelectedTaskIndex(0);
     setTitle('');
     setDesc('');
   };
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+
+=======
+  
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
   const onSave = async () => {
     const resp:any = await createNewTask(title, desc);
     const { data = {} } = resp;
     updateTask(data.id, data.title, data.description, false, data.status)
     if(resp && resp.data)
+<<<<<<< HEAD
     {
+=======
+<<<<<<< HEAD
+    {
+=======
+<<<<<<< HEAD
+    {
+=======
+      {
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
         createTask();
         closeSheet();
     }
   }  
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
   const createTask = (): void => { 
     setTasks([...tasks, { title , desc }]);
     setTitle('');
     setDesc('');
   };
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
 
   const fetchTask = async()=>{
     try{
       const response=await axios.get(baseUrl + '/api/todos/');
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+=======
+  
+  const fetchTask = async()=>{
+    try{
+      const response=await axios.get(`${baseUrl}/api/todos`);
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
       console.log({response})
       allTask(response.data)
     }catch(error){
@@ -65,7 +154,19 @@ export default function Home() {
   },[]);
   
   return (
+<<<<<<< HEAD
     <>
+=======
+<<<<<<< HEAD
+    <>
+=======
+<<<<<<< HEAD
+    <>
+=======
+  <>
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
     <title>To-Do App</title>
     <div className=" p-10 pt-10 w-full h-16  flex flex-row justify-between align-center">
     <div className="ml-20 w-20 h-7 flex flex-row justify-item-start align-center self-start">
@@ -124,6 +225,26 @@ export default function Home() {
 
     <Todos />
     </div>
+<<<<<<< HEAD
 </>
   );
 }
+=======
+<<<<<<< HEAD
+</>
+  );
+}
+=======
+<<<<<<< HEAD
+</>
+  );
+}
+=======
+  </>
+  );
+}
+
+
+>>>>>>> 10afdb4 (Last Changes)
+>>>>>>> 31da222 (Last Changes)
+>>>>>>> bf85ecb (Last Changes)
