@@ -19,37 +19,6 @@ export const useTaskList = create(
             createdTasks: data
         }))
       },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
-      updateTask: (id: string, title: string, description: string, showEdit: boolean, status: string):any => {
-        set((state: any) => ({
-          createdTasks: [
-            ...state.createdTasks,
-            {
-              id: id,
-              title: title,
-              description: description,
-              showEdit: showEdit,
-              status:"todo"
-            } as TaskList,
-          ],
-        }));
-      },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> 70243a5 (New Commit)
       updateTask: (id: string, title: string, description: string, showEdit: boolean, status: string): any => {
         set((state: any) => {
           // Check if the task with the provided ID already exists
@@ -74,9 +43,6 @@ export const useTaskList = create(
         });
       },
 
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
       editTodoTasks: (id: string, title: string, description: string, showEdit: boolean,status:string) => {
         set((state: any) => ({
           createdTasks:  state.createdTasks.map((task: any) =>
@@ -86,16 +52,7 @@ export const useTaskList = create(
         ),
         }));
       },
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
 
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
       deleteTask: (id: string) => {
         set((state: any) => ({
           createdTasks: state.createdTasks.filter(
@@ -117,13 +74,4 @@ export const useTaskList = create(
     }
   )
 );
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
 
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)

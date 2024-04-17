@@ -41,7 +41,7 @@ const Todos = (props: any) => {
     const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
     const [isConnected, setIsConnected] = useState(false);
     const [transport, setTransport] = useState("N/A");
-    
+
     // useEffect(()=>{
     //     const socket=io();
     //     socket.on('newTodo', (newTodo: TaskList) => {
@@ -55,50 +55,50 @@ const Todos = (props: any) => {
 
     useEffect(() => {
 
-        console.log({s: socket.connected})
+        console.log({ s: socket.connected })
         if (socket.connected) {
-          onConnect();
+            onConnect();
         }
-    
+
         function onConnect() {
-          setIsConnected(true);
-          setTransport(socket.io.engine.transport.name);
-    
-          socket.io.engine.on("upgrade", (transport: any) => {
-            setTransport(transport.name);
-          });
+            setIsConnected(true);
+            setTransport(socket.io.engine.transport.name);
+
+            socket.io.engine.on("upgrade", (transport: any) => {
+                setTransport(transport.name);
+            });
         }
-    
+
         socket.on('message', (message) => {
             // setReceivedMessage(message);
 
-            console.log({message})
-            
-            updateTask(message.id, message.title, message.description, false, message.status)
-                
+            console.log({ message })
 
-          });
-      
+            updateTask(message.id, message.title, message.description, false, message.status)
+
+
+        });
+
         function onDisconnect() {
-          setIsConnected(false);
-          setTransport("N/A");
+            setIsConnected(false);
+            setTransport("N/A");
         }
-    
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
-    
+
         return () => {
-          socket.off("connect", onConnect);
-          socket.off("disconnect", onDisconnect);
+            socket.off("connect", onConnect);
+            socket.off("disconnect", onDisconnect);
         };
-      }, []);
+    }, []);
 
     const openSheet = () => {
         setIsSheetOpen(true);
         setIsCheckboxChecked(false);
         createNewTask(title, desc);
     };
- 
+
     const closeSheet = () => {
         setIsSheetOpen(false);
         setSelectedTaskIndex(0);
@@ -113,19 +113,8 @@ const Todos = (props: any) => {
 
     const update = async (id: number, selectedTitle = "", selectedDes = "") => {
         try {
-<<<<<<< HEAD
             const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
-=======
-<<<<<<< HEAD
-            const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
-=======
-<<<<<<< HEAD
-            const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
-=======
-            const resp = await axios.put(baseUrl +'/api/todos/${id}', { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
+
             // updateTask(title, desc);
             if (resp) {
                 const finalRes = createdTasks.map((res: TaskList) => {
@@ -142,7 +131,7 @@ const Todos = (props: any) => {
                         return res
                     }
                 })
-                console.log({finalRes})
+                console.log({ finalRes })
                 allTask(finalRes)
             }
             setIsCheckboxChecked(false);
@@ -158,8 +147,8 @@ const Todos = (props: any) => {
 
     const createTask = async () => {
         try {
-            const resp= await createNewTask(title, desc);
-            const {data = {}}: any = resp
+            const resp = await createNewTask(title, desc);
+            const { data = {} }: any = resp
             updateTask(data.id, data.title, data.description, false)
             setTitle('');
             setDesc('');
@@ -169,34 +158,12 @@ const Todos = (props: any) => {
             console.error('Error creating task:', error);
         }
     };
-    
+
     const deleteTaskHandler = async (id: number) => {
         try {
-<<<<<<< HEAD
             const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
             deleteTask(id)
             socket.on('taskDeleted', (deletedTaskId) => {
-=======
-<<<<<<< HEAD
-            const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
-            deleteTask(id)
-            socket.on('taskDeleted', (deletedTaskId) => {
-=======
-<<<<<<< HEAD
-            const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
-            deleteTask(id)
-            socket.on('taskDeleted', (deletedTaskId) => {
-=======
-            const resp = await axios.delete( baseUrl + '/api/todos/${id}');
-            deleteTask(id)
-<<<<<<< HEAD
-            socket.on('taskDeleted', (deletedTaskId:any) => {
-=======
-            socket.on('taskDeleted', (deletedTaskId) => {
->>>>>>> 70243a5 (New Commit)
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
                 // Filter out the deleted task from the client-side state
                 deleteTask(deletedTaskId)
             });
@@ -209,43 +176,15 @@ const Todos = (props: any) => {
 
     const deleteCompletedtasks = async () => {
         try {
-<<<<<<< HEAD
+
             const resp = await axios.delete(`${baseUrl}/api/todos/`);
-=======
-<<<<<<< HEAD
-            const resp = await axios.delete(`${baseUrl}/api/todos/`);
-=======
-<<<<<<< HEAD
-            const resp = await axios.delete(`${baseUrl}/api/todos/`);
-=======
-            const resp = await axios.delete(baseUrl + '/api/todos/');
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
             if (resp.status === 200) {
                 setShowCompletedTasks(false);
                 allTask(resp.data)
-                socket.on('tasksDeleted',()=>{
-<<<<<<< HEAD
-                    
-=======
-<<<<<<< HEAD
-                    
-=======
-<<<<<<< HEAD
-                    
-=======
-<<<<<<< HEAD
-                    
-=======
+                socket.on('tasksDeleted', () => {
                     console.log('Completed tasks deleted successfully');
->>>>>>> 70243a5 (New Commit)
->>>>>>> 10afdb4 (Last Changes)
->>>>>>> 31da222 (Last Changes)
->>>>>>> bf85ecb (Last Changes)
                 });
-            } else 
-            {
+            } else {
                 console.error('Failed to delete all tasks');
             }
         } catch (error) {
@@ -280,7 +219,7 @@ const Todos = (props: any) => {
                                                 <>
                                                     <Dialog>
                                                         <DialogTrigger>
-                        {/*  EDIT  */}
+                                                            {/*  EDIT  */}
                                                             <Image src={editimg} alt="" onClick={() => { editTasks(index) }} width={28} height={28} className="absolute top-10 right-12 cursor-pointer"></Image>
                                                         </DialogTrigger>
                                                         <DialogContent className="sm:max-w-[425px]">
@@ -353,12 +292,12 @@ const Todos = (props: any) => {
                         }
                         )}
                     </div>
-            {/* COMPLETED TASKS */}
+                    {/* COMPLETED TASKS */}
                     {Array.isArray(createdTasks) && createdTasks.some((task: any) => task?.status === "completed") && (
                         <div>
                             <h3 className='mt-12 ml-48 flex flex-row justify-start items-start font-bold font-[Urbanist]'>Completed Tasks</h3>
                             <div className='flex flex-row justify-end align-end mr-40'>
-            {/* DELETE ALL */}
+                                {/* DELETE ALL */}
                                 <Image src={deleteall} alt="" onClick={() => { deleteCompletedtasks() }} width={91} height={30} className=" rounded-l-8 px-3 py-1"></Image>
                             </div>
                         </div>)}
