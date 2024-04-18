@@ -40,7 +40,6 @@ export default function Home() {
     const { data = {} } = resp;
     updateTask(data.id, data.title, data.description, false, data.status)
     if (resp && resp.data) {
-
       createTask();
       closeSheet();
     }
