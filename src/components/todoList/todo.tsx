@@ -58,6 +58,8 @@ const Todos = (props: any) => {
             });
         }
 
+      
+
         socket.on('message', (message) => {
             // setReceivedMessage(message);
 
@@ -68,6 +70,10 @@ const Todos = (props: any) => {
 
         socket.on('taskDeleted', (deletedTaskId) => {
             deleteTask(deletedTaskId);
+        });
+
+        socket.on('newTask',(insertedTask:any) => {
+            createNewTask(insertedTask.title,insertedTask.desc)
         });
 
         socket.on('tasksDeleted',()=>{
