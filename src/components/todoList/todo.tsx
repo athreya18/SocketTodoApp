@@ -174,7 +174,7 @@ const Todos = (props: any) => {
             const resp = await createNewTask(title, desc);
             const { data = {} }: any = resp
             console.log({data})
-            newTasks(data.id, data.title, data.description, false, data.status)
+            // newTasks(data.id, data.title, data.description, false, data.status)
     
             socket.on('newTask',(insertedTask)=>{
 
