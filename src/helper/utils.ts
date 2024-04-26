@@ -2,7 +2,7 @@ import { useTaskList } from "@/store";
 import axios from "axios";
 import { io } from 'socket.io-client';
 import { socket } from "./socket";
-export const baseUrl = "http://localhost:3001"
+export const baseUrl = "https://socketapi-2.onrender.com"
 // export const baseUrl = "https://final-api-todos.onrender.com"
 
 export const createNewTask = async (title: string, desc: string) => {
