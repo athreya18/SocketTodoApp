@@ -73,12 +73,12 @@ const Todos = (props: any) => {
         });
 
 
-        socket.on('newTask', (insertedTask: any) => {
-            console.log({insertedTask})
-            if(Object.keys(insertedTask || {})?.length > 0) {
-                createNewTask(insertedTask.title, insertedTask.desc)
-            }
-        });
+        // socket.on('newTask', (insertedTask: any) => {
+        //     console.log({insertedTask})
+        //     if(Object.keys(insertedTask || {})?.length > 0) {
+        //         createNewTask(insertedTask.title, insertedTask.desc)
+        //     }
+        // });
 
         socket.on('tasksDeleted', () => {
             console.log('Completed tasks deleted successfully');
@@ -175,6 +175,7 @@ const Todos = (props: any) => {
             const { data = {} }: any = resp
             console.log({data})
             newTasks(data.id, data.title, data.description, false, data.status)
+    
             socket.on('newTask',(insertedTask)=>{
 
                 if(Object.keys(insertedTask ||{})?.length>0){
