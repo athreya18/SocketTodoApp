@@ -33,7 +33,21 @@ export const useTaskList = create(
                     : task
             ),
         }))},
-
+        newTasks: (id: any, title: any, description: any, showEdit : boolean, status: string) => {
+          console.log({id, title});
+          set((state: any) => ({
+              createdTasks: [
+                  ...state.createdTasks,
+                  {
+                      id,
+                      title,
+                      description,
+                      showEdit,
+                      status
+                  }
+              ]
+          }));
+      },
       editTodoTasks: (id: string, title: string, description: string, showEdit: boolean,status:string) => {
         set((state: any) => ({
           createdTasks:  state.createdTasks.map((task: any) =>

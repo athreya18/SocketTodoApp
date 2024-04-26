@@ -31,7 +31,7 @@ const Todos = (props: any) => {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [tasks, setTasks] = useState<Array<{ title: string, desc: string }>>([]);
     const [selectedTaskIndex, setSelectedTaskIndex] = useState<number>(0);
-    const { updateTask, createdTasks, deleteTask, editTodoTasks, allTask, deleteAlltasks }: any = useTaskList();
+    const { updateTask, createdTasks, deleteTask, editTodoTasks, allTask, newTasks }: any = useTaskList();
     const [title, setTitle] = useState<string>("");
     const [desc, setDesc] = useState<string>("");
     const [isCheckboxChecked, setIsCheckboxChecked] = useState<boolean>(false);
@@ -41,6 +41,8 @@ const Todos = (props: any) => {
     const [showCompletedTasks, setShowCompletedTasks] = useState<boolean>(false);
     const [isConnected, setIsConnected] = useState(false);
     const [transport, setTransport] = useState("N/A");
+    const [title1, setTitle1] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
 
     useEffect(() => {
 
@@ -52,47 +54,52 @@ const Todos = (props: any) => {
         function onConnect() {
             setIsConnected(true);
             setTransport(socket.io.engine.transport.name);
-
             socket.io.engine.on("upgrade", (transport: any) => {
                 setTransport(transport.name);
             });
         }
 
-      
-
         socket.on('message', (message) => {
             // setReceivedMessage(message);
-
             console.log({ message })
-
             updateTask(message.id, message.title, message.description, false, message.status)
         });
 
         socket.on('taskDeleted', (deletedTaskId) => {
-            deleteTask(deletedTaskId);
+            if(deletedTaskId.length>0)
+                {
+                    deleteTask(deletedTaskId);
+                }
         });
 
-        socket.on('newTask',(insertedTask:any) => {
-            createNewTask(insertedTask.title,insertedTask.desc)
+
+        socket.on('newTask', (insertedTask: any) => {
+            console.log({insertedTask})
+            if(Object.keys(insertedTask || {})?.length > 0) {
+                createNewTask(insertedTask.title, insertedTask.desc)
+            }
         });
 
-        socket.on('tasksDeleted',()=>{
+        socket.on('tasksDeleted', () => {
             console.log('Completed tasks deleted successfully');
             console.log('22222')
+            socket.off('tasksDeleted');
             deleteCompletedtasks();
         });
-
-        socket.on('taskUpdated', (updatedTask) => {  
-            updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
+    
+        socket.on('taskUpdated', (updatedTask) => {
+            if(Object.keys(updatedTask || {})?.length>0){
+                updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
+            }
         });
-
+        
         function onDisconnect() {
             setIsConnected(false);
             setTransport("N/A");
         }
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
-
+        
         return () => {
             socket.off("connect", onConnect);
             socket.off('taskDeleted');
@@ -101,13 +108,21 @@ const Todos = (props: any) => {
             socket.off("disconnect", onDisconnect);
         };
     }, []);
+    
+    const handleTitleBlur = async () => {
+        try {
+            const response = await axios.post("http://localhost:3001/api/generate-content", {title})
+            setDesc(response.data.description);//needed?
+        } catch (error) {
+            console.error('Error generating description:', error);
+        }
+    };
 
     const openSheet = () => {
         setIsSheetOpen(true);
         setIsCheckboxChecked(false);
-        createNewTask(title, desc);
+        // createNewTask(title, desc);
     };
-
     const closeSheet = () => {
         setIsSheetOpen(false);
         setSelectedTaskIndex(0);
@@ -123,7 +138,6 @@ const Todos = (props: any) => {
     const update = async (id: number, selectedTitle = "", selectedDes = "") => {
         try {
             const resp = await axios.put(`${baseUrl}/api/todos/${id}`, { title: selectedTitle || title, description: selectedDes || desc, status: selectedDes ? "completed" : "todo" });
-
             // updateTask(title, desc);
             if (resp) {
                 const finalRes = createdTasks.map((res: TaskList) => {
@@ -145,25 +159,31 @@ const Todos = (props: any) => {
             }
             setIsCheckboxChecked(false);
             closeSheet();
-
             socket.on('taskUpdated', (updatedTask) => {
                 updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
             });
-            
+
         } catch (error) {
             console.error('Error updating task:', error);
         }
     };
 
     const createTask = async () => {
+        console.log("jgvgchchch")
         try {
             const resp = await createNewTask(title, desc);
             const { data = {} }: any = resp
-            updateTask(data.id, data.title, data.description, false)
+            console.log({data})
+            newTasks(data.id, data.title, data.description, false, data.status)
+            socket.on('newTask',(insertedTask)=>{
+
+                if(Object.keys(insertedTask ||{})?.length>0){
+                    newTasks(insertedTask.id,insertedTask.title,insertedTask.description,insertedTask.showEdit,insertedTask.status);
+                }
+            });
             setTitle('');
             setDesc('');
             closeSheet();
-
         } catch (error) {
             console.error('Error creating task:', error);
         }
@@ -192,14 +212,14 @@ const Todos = (props: any) => {
             if (resp.status === 200) {
                 setShowCompletedTasks(false);
                 allTask(resp.data)
-                socket.on('tasksDeleted', () => {
-                    console.log('Completed tasks deleted successfully');
-                });
+                // socket.on('tasksDeleted', () => {
+                //     // console.log('Completed tasks deleted successfully');
+                // });
             } else {
                 console.error('Failed to delete all tasks');
             }
         } catch (error) {
-            // console.error('Error deleting all tasks:', error);
+            console.error('Error deleting all tasks:', error);
         }
     };
     const editTasks = (index: number) => {
@@ -210,7 +230,7 @@ const Todos = (props: any) => {
         setSelectedTaskId(null);
     };
 
-    console.log({ createdTasks })
+    // console.log({ createdTasks })
     return (
         <div>
             {createdTasks.length !== 0 && (
@@ -338,9 +358,11 @@ const Todos = (props: any) => {
                         <SheetTitle>
                             <h2 className="font-['Urbanist'] text-black text-base font-semibold leading-6 text-left ">Create Task</h2>
                             <h3 className="text-rgba-63-61-86 font-['Urbanist'] text-sm font-medium leading-4.5 text-left w-27 h-17">Title</h3>
-                            <Input type="text" className=" font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-17" placeholder="Enter text.. " onChange={(e) => { setTitle(e.target.value) }} />
-                            <h3 className=" w-70 h-17 font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86">Description</h3>
-                            <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56" onChange={(e) => { setDesc(e.target.value) }} />
+                            <Input type="text" className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-17" placeholder="Enter text.." onChange={(e) => { setTitle(e.target.value) }}
+                                onBlur={handleTitleBlur} />
+                            <h3 className="w-70 h-17 font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86">Description</h3>
+                            <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56"
+                                value={desc} onChange={(e) => { setDesc(e.target.value) }} />
                         </SheetTitle>
                         <SheetDescription>
                             <div>

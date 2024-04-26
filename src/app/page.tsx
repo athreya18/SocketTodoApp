@@ -12,11 +12,12 @@ import list from "../components/images/list.svg";
 import ss from "../components/images/ss.svg";
 import axios from 'axios';
 import { baseUrl, createNewTask } from "@/helper/utils";
+import OpenAI from "openai";
 
 
 export default function Home() {
 
-  const { updateTask, createdTasks, allTask }: any = useTaskList();
+  const { updateTask, createdTasks, allTask, newTasks }: any = useTaskList();
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<number>(0);
   const [tasks, setTasks] = useState<Array<{ title: string, desc: string }>>([]);
@@ -26,6 +27,15 @@ export default function Home() {
   const openSheet = () => {
     setIsSheetOpen(true);
   };
+
+  const handleTitleBlur = async () => {
+    try {
+        const response = await axios.post(`${baseUrl}/api/generate-content`, {title})
+        setDesc(response.data.description);//needed?
+    } catch (error) {
+        console.error('Error generating description:', error);
+    }
+};
 
   const closeSheet = () => {
 
@@ -38,11 +48,12 @@ export default function Home() {
   const onSave = async () => {
     const resp: any = await createNewTask(title, desc);
     const { data = {} } = resp;
-    updateTask(data.id, data.title, data.description, false, data.status)
-    if (resp && resp.data) {
-      createTask();
+
+    newTasks(data.id, data.title, data.description, false, data.status)
+    // if (resp && resp.data) {
+    //   createTask();
       closeSheet();
-    }
+    // }
   }
 
   const createTask = (): void => {
@@ -50,7 +61,6 @@ export default function Home() {
     setTitle('');
     setDesc('');
   };
-
 
   const fetchTask = async () => {
     try {
@@ -105,9 +115,9 @@ export default function Home() {
               <SheetTitle>
                 <h2 className="font-['Urbanist'] text-black text-base font-semibold leading-6 text-left">Create Task</h2>
                 <h3 className=" text-rgba-63-61-86 font-['Urbanist'] text-sm font-medium leading-4.5 text-left w-27 h-17">Title</h3>
-                <Input type="text" className=" font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-17" placeholder="Enter text.. " onChange={(e) => { setTitle(e.target.value) }} />
+                <Input type="text" className=" font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-17" placeholder="Enter text.. " onChange={(e) => { setTitle(e.target.value) }} onBlur={handleTitleBlur} />
                 <h3 className=" w-70 h-17 font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86">Description</h3>
-                <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56" onChange={(e) => { setDesc(e.target.value) }} />
+                <Input type="text" placeholder="Enter Description.." value= {desc} className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56" onChange={(e) => { setDesc(e.target.value) }} />
               </SheetTitle>
               <SheetDescription>
                 <div>
