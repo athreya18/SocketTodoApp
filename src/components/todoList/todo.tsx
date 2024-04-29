@@ -112,6 +112,7 @@ const Todos = (props: any) => {
             socket.off('taskUpdated');
             socket.off('tasksDeleted');
             socket.off("disconnect", onDisconnect);
+            socket.off('newTask');
         };
     }, []);
     
