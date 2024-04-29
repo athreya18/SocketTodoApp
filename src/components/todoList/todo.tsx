@@ -92,6 +92,12 @@ const Todos = (props: any) => {
                 updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
             }
         });
+
+        socket.on('newTask',(insertedTask)=>{
+            if(Object.keys(insertedTask ||{})?.length>0){
+                newTasks(insertedTask.id,insertedTask.title,insertedTask.description,insertedTask.showEdit,insertedTask.status);
+            }
+        });
         
         function onDisconnect() {
             setIsConnected(false);
@@ -174,14 +180,7 @@ const Todos = (props: any) => {
             const resp = await createNewTask(title, desc);
             const { data = {} }: any = resp
             console.log({data})
-            // newTasks(data.id, data.title, data.description, false, data.status)
-    
-            socket.on('newTask',(insertedTask)=>{
-
-                if(Object.keys(insertedTask ||{})?.length>0){
-                    newTasks(insertedTask.id,insertedTask.title,insertedTask.description,insertedTask.showEdit,insertedTask.status);
-                }
-            });
+            newTasks(data.id, data.title, data.description, false, data.status)
             setTitle('');
             setDesc('');
             closeSheet();
