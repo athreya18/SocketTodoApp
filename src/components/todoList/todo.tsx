@@ -111,7 +111,7 @@ const Todos = (props: any) => {
     
     const handleTitleBlur = async () => {
         try {
-            const response = await axios.post("http://localhost:3001/api/generate-content", {title})
+            const response = await axios.post(`${baseUrl}/api/generate-content`, {title})
             setDesc(response.data.description);//needed?
         } catch (error) {
             console.error('Error generating description:', error);
