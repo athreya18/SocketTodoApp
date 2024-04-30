@@ -362,7 +362,7 @@ const Todos = (props: any) => {
                             <Input type="text" className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-17" placeholder="Enter text.." onChange={(e) => { setTitle(e.target.value) }}
                                 onBlur={handleTitleBlur} />
                             <h3 className="w-70 h-17 font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 py-1.5">Description</h3>
-                            <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56 py-1.5"
+                            <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56 pt-2.5"
                                 value={desc} onChange={(e) => { setDesc(e.target.value) }} />
                         </SheetTitle>
                         <SheetDescription>
