@@ -358,11 +358,11 @@ const Todos = (props: any) => {
                     <SheetHeader>
                         <SheetTitle>
                             <h2 className="font-['Urbanist'] text-black text-base font-semibold leading-6 text-left ">Create Task</h2>
-                            <h3 className="text-rgba-63-61-86 font-['Urbanist'] text-sm font-medium leading-4.5 text-left w-27 h-17">Title</h3>
+                            <h3 className="text-rgba-63-61-86 font-['Urbanist'] text-sm font-medium leading-4.5 text-left w-27 h-17 py-1.5">Title</h3>
                             <Input type="text" className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-17" placeholder="Enter text.." onChange={(e) => { setTitle(e.target.value) }}
                                 onBlur={handleTitleBlur} />
-                            <h3 className="w-70 h-17 font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86">Description</h3>
-                            <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56"
+                            <h3 className="w-70 h-17 font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 py-1.5">Description</h3>
+                            <Input type="text" placeholder="Enter Description.." className="font-['Urbanist'] text-sm font-medium leading-4.5 text-left text-rgba-63-61-86 h-56 py-1.5"
                                 value={desc} onChange={(e) => { setDesc(e.target.value) }} />
                         </SheetTitle>
                         <SheetDescription>
