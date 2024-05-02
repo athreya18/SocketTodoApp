@@ -90,7 +90,7 @@ export default function Home() {
           <Image src={john} width={42} height={42} alt="" className="ml-2" />
         </div>
       </div>
-      {/* Welcome John */}
+{/* Welcome John */}
 
       <div className="mt-10 ml-20 w-48 h-9  flex flex-row justify-center items-center">
         <h1 className="ml-8 font-['Urbanist'] text-2xl font-bold leading-34 tracking-normal text-left"> Welcome,</h1>
@@ -100,7 +100,7 @@ export default function Home() {
         <p className=" ml-8 font-['Urbanist'] text-base font-medium leading-19 tracking-normal text-gray-500">Create tasks to achieve more.</p>
       </div>
 
-      {/* Image */}
+{/* Image */}
       {createdTasks.length == 0 && <div className="flex flex-row justify-center items-center">
         <Image src={list} width={148} height={144} alt="" className="mt-20"></Image>
       </div>}

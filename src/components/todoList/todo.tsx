@@ -60,25 +60,15 @@ const Todos = (props: any) => {
         }
 
         socket.on('message', (message) => {
-            // setReceivedMessage(message);
             console.log({ message })
             updateTask(message.id, message.title, message.description, false, message.status)
         });
 
         socket.on('taskDeleted', (deletedTaskId) => {
-            if(deletedTaskId.length>0)
-                {
-                    deleteTask(deletedTaskId);
-                }
+            if (deletedTaskId.length > 0) {
+                deleteTask(deletedTaskId);
+            }
         });
-
-
-        // socket.on('newTask', (insertedTask: any) => {
-        //     console.log({insertedTask})
-        //     if(Object.keys(insertedTask || {})?.length > 0) {
-        //         createNewTask(insertedTask.title, insertedTask.desc)
-        //     }
-        // });
 
         socket.on('tasksDeleted', () => {
             console.log('Completed tasks deleted successfully');
@@ -86,26 +76,26 @@ const Todos = (props: any) => {
             socket.off('tasksDeleted');
             deleteCompletedtasks();
         });
-    
+
         socket.on('taskUpdated', (updatedTask) => {
-            if(Object.keys(updatedTask || {})?.length>0){
+            if (Object.keys(updatedTask || {})?.length > 0) {
                 updateTask(updatedTask.id, updatedTask.title, updatedTask.description, updatedTask.showEdit, updatedTask.status);
             }
         });
 
-        socket.on('newTask',(insertedTask)=>{
-            if(Object.keys(insertedTask ||{})?.length>0){
-                newTasks(insertedTask.id,insertedTask.title,insertedTask.description,insertedTask.showEdit,insertedTask.status);
+        socket.on('newTask', (insertedTask) => {
+            if (Object.keys(insertedTask || {})?.length > 0) {
+                newTasks(insertedTask.id, insertedTask.title, insertedTask.description, insertedTask.showEdit, insertedTask.status);
             }
         });
-        
+
         function onDisconnect() {
             setIsConnected(false);
             setTransport("N/A");
         }
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
-        
+
         return () => {
             socket.off("connect", onConnect);
             socket.off('taskDeleted');
@@ -115,11 +105,11 @@ const Todos = (props: any) => {
             socket.off('newTask');
         };
     }, []);
-    
+
     const handleTitleBlur = async () => {
         try {
-            const response = await axios.post(`${baseUrl}/api/generate-content`, {title})
-            setDesc(response.data.description);//needed?
+            const response = await axios.post(`${baseUrl}/api/generate-content`, { title })
+            setDesc(response.data.description);
         } catch (error) {
             console.error('Error generating description:', error);
         }
@@ -180,7 +170,7 @@ const Todos = (props: any) => {
         try {
             const resp = await createNewTask(title, desc);
             const { data = {} }: any = resp
-            console.log({data})
+            console.log({ data })
             // newTasks(data.id, data.title, data.description, false, data.status)
             setTitle('');
             setDesc('');
@@ -196,7 +186,6 @@ const Todos = (props: any) => {
             const resp = await axios.delete(`${baseUrl}/api/todos/${id}`);
             deleteTask(id)
             socket.on('taskDeleted', (deletedTaskId) => {
-                // Filter out the deleted task from the client-side state
                 deleteTask(deletedTaskId)
             });
 
@@ -289,7 +278,7 @@ const Todos = (props: any) => {
                                             )}
                                             <div className='absolute flex flex-row justify-start self-start left-5 top-8'>
                                                 <div className=''>
-                                                    {/*CHECKBOXX */}
+{/*CHECKBOXX */}
                                                     <Checkbox id={`checkbox-${index}`} className='w-4 h-4 ' checked={task.showEdit} onCheckedChange={() => {
                                                         setIsCheckboxChecked(!isCheckboxChecked);
                                                         task.status = "completed";
@@ -324,7 +313,7 @@ const Todos = (props: any) => {
                         }
                         )}
                     </div>
-                    {/* COMPLETED TASKS */}
+{/* COMPLETED TASKS */}
                     {Array.isArray(createdTasks) && createdTasks.some((task: any) => task?.status === "completed") && (
                         <div>
                             <h3 className='mt-12 ml-48 flex flex-row justify-start items-start font-bold font-[Urbanist]'>Completed Tasks</h3>
@@ -389,4 +378,3 @@ const Todos = (props: any) => {
 }
 
 export default Todos;
-
